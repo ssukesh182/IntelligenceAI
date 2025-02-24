@@ -9,25 +9,25 @@ const NavBar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="text-xl font-semibold">
-            ImagiQuest
+            Educreate
           </Link>
           <div className="flex items-center gap-4">
             <Link to="/about">
               <Button variant="ghost" className="flex items-center gap-2">
                 <Info className="w-4 h-4" />
-                About
+                Details
               </Button>
             </Link>
             <Link to="/signin">
               <Button variant="ghost" className="flex items-center gap-2">
                 <LogIn className="w-4 h-4" />
-                Sign In
+                SignIn
               </Button>
             </Link>
             <Link to="/signup">
               <Button variant="default" className="flex items-center gap-2">
                 <UserPlus className="w-4 h-4" />
-                Sign Up
+                SignUp
               </Button>
             </Link>
           </div>
