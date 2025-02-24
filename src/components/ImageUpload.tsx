@@ -16,6 +16,8 @@ const ImageUpload: React.FC = () => {
   const [detectedLabel, setDetectedLabel] = useState<string>("");
   const [youtubeResults, setYoutubeResults] = useState<YoutubeResult[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const navigate = useNavigate();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +57,30 @@ const ImageUpload: React.FC = () => {
     }
   };
 
+  const startCamera = async () => {
+    if (videoRef.current) {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
+    }
+  };
+
+  const captureImage = () => {
+    if (videoRef.current && canvasRef.current) {
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+        const imageData = canvasRef.current.toDataURL("image/png");
+        setImage(imageData);
+
+        canvasRef.current.toBlob((blob) => {
+          if (blob) {
+            classifyImage(new File([blob], "captured.png", { type: "image/png" }));
+          }
+        });
+      }
+    }
+  };
+
   return (
     <div className="space-y-4 w-full max-w-2xl font-montserrat">
       <div className="flex gap-4">
@@ -66,9 +92,20 @@ const ImageUpload: React.FC = () => {
           <span className="text-lg">Upload Image</span>
           <Input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
         </button>
+
+        <button
+          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
+          onClick={startCamera}
+        >
+          <Camera className="w-6 h-6 text-[#2AF598]" />
+          <span className="text-lg">Take Photo</span>
+        </button>
       </div>
 
       {image && <img src={image} alt="Uploaded" className="max-w-full rounded-lg" />}
+
+      <video ref={videoRef} className="hidden" autoPlay></video>
+      <canvas ref={canvasRef} className="hidden"></canvas>
 
       {detectedLabel && (
         <div className="mt-4 flex items-center justify-center gap-2 w-full rounded-full border-2 border-[#2AF598] bg-[#2f3640] p-3 shadow-lg text-lg font-semibold text-white">
