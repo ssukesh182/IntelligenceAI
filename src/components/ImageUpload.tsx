@@ -68,9 +68,9 @@ const ImageUpload: React.FC = () => {
   return (
     <div className="space-y-4 w-full max-w-2xl font-montserrat">
       <div className="flex gap-4">
-        {/* Upload Image Button (No Border) */}
+        {/* Upload Image Button */}
         <button
-          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full bg-[#2f3640] text-white font-semibold shadow-lg transition-all hover:bg-[#3a3f4b]"
+          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
           onClick={() => fileInputRef.current?.click()}
         >
           <Upload className="w-6 h-6 text-[#2AF598]" />
@@ -84,9 +84,9 @@ const ImageUpload: React.FC = () => {
           />
         </button>
 
-        {/* Take Photo Button (No Border) */}
+        {/* Take Photo Button */}
         <button
-          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full bg-[#2f3640] text-white font-semibold shadow-lg transition-all hover:bg-[#3a3f4b]"
+          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
           onClick={handleCameraCapture}
         >
           <Camera className="w-6 h-6 text-[#2AF598]" />
