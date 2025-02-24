@@ -7,7 +7,7 @@ import FAQ from "@/components/FAQ";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#E5DEFF]">
       <NavBar />
       <Sidebar />
       <main className="ml-64 pt-16 min-h-screen">
