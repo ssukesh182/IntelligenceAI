@@ -45,17 +45,13 @@ const Sidebar = () => {
                     </div>
                 </div>
                 <ScrollArea className="h-[calc(100vh-4rem)] p-4">
-                    <div className="space-y-2">
-                        {historyItems.map((item, index) => (
-                            <div
-                                key={index}
-                                className={`p-2 rounded-md cursor-pointer transition-colors text-gray-300 ${activeItem === index ? 'bg-gray-700' : 'hover:bg-gray-800/50'}`}
-                                onClick={() => setActiveItem(index)}
-                            >
-                                {item}
-                            </div>
-                        ))}
-                    </div>
+                <div className="space-y-2">
+  <div className="p-2 rounded-md cursor-pointer transition-colors text-gray-300 hover:bg-gray-800/50">Mobile</div>
+  <div className="p-2 rounded-md cursor-pointer transition-colors text-gray-300 hover:bg-gray-800/50">Mouse</div>
+  <div className="p-2 rounded-md cursor-pointer transition-colors text-gray-300 hover:bg-gray-800/50">Bottle</div>
+  <div className="p-2 rounded-md cursor-pointer transition-colors text-gray-300 hover:bg-gray-800/50">Pen</div>
+</div>
+
                 </ScrollArea>
             </div>
         </>

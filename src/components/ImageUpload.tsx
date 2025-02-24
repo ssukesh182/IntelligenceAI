@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Upload, Camera } from "lucide-react";
 
-
 interface YoutubeResult {
   title: string;
   url: string;
@@ -20,7 +19,9 @@ const ImageUpload: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const navigate = useNavigate();
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
+  // 📌 Handles Image Upload
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -33,6 +34,7 @@ const ImageUpload: React.FC = () => {
     }
   };
 
+  // 📌 Calls API to classify image
   const classifyImage = async (file: File) => {
     try {
       const formData = new FormData();
@@ -58,35 +60,54 @@ const ImageUpload: React.FC = () => {
     }
   };
 
+  // 📌 Starts Camera Stream
   const startCamera = async () => {
-    if (videoRef.current) {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      videoRef.current.srcObject = stream;
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setStream(mediaStream);
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+      }
+    } catch (err) {
+      console.error("Camera access denied!", err);
+      alert("Please allow camera access!");
     }
   };
 
+  // 📌 Captures Image & Sends for Classification
   const captureImage = () => {
-    if (videoRef.current && canvasRef.current) {
-      const context = canvasRef.current.getContext("2d");
-      if (context) {
-        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
-        const imageData = canvasRef.current.toDataURL("image/png");
-        setImage(imageData);
+    if (!videoRef.current || !canvasRef.current) return;
+    const context = canvasRef.current.getContext("2d");
+    if (context) {
+      context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+      const imageData = canvasRef.current.toDataURL("image/png");
+      setImage(imageData);
 
-        canvasRef.current.toBlob((blob) => {
-          if (blob) {
-            classifyImage(new File([blob], "captured.png", { type: "image/png" }));
-          }
-        });
-      }
+      canvasRef.current.toBlob((blob) => {
+        if (blob) {
+          classifyImage(new File([blob], "captured.png", { type: "image/png" }));
+        }
+      });
+    }
+    stopCamera();
+  };
+
+  // 📌 Stops Camera Stream
+  const stopCamera = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      setStream(null);
     }
   };
 
   return (
     <div className="space-y-4 w-full max-w-2xl font-montserrat">
       <div className="flex gap-4">
+        {/* 📌 Upload Image Button */}
         <button
-          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
+          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full 
+                     border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg 
+                     transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
           onClick={() => fileInputRef.current?.click()}
         >
           <Upload className="w-6 h-6 text-[#2AF598]" />
@@ -94,26 +115,47 @@ const ImageUpload: React.FC = () => {
           <Input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
         </button>
 
-        <button
-          className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
-          onClick={startCamera}
-        >
-          <Camera className="w-6 h-6 text-[#2AF598]" />
-          <span className="text-lg">Take Photo</span>
-        </button>
+        {/* 📌 Take Photo Button */}
+        {stream ? (
+          <button
+            className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full 
+                       border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg 
+                       transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
+            onClick={captureImage}
+          >
+            <Camera className="w-6 h-6 text-[#2AF598]" />
+            <span className="text-lg">Capture Photo</span>
+          </button>
+        ) : (
+          <button
+            className="flex-1 h-32 flex flex-col items-center justify-center gap-2 rounded-full 
+                       border-2 border-[#2AF598] bg-[#2f3640] text-white font-semibold shadow-lg 
+                       transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
+            onClick={startCamera}
+          >
+            <Camera className="w-6 h-6 text-[#2AF598]" />
+            <span className="text-lg">Take Photo</span>
+          </button>
+        )}
       </div>
 
-      {image && <img src={image} alt="Uploaded" className="max-w-full rounded-lg" />}
+      {/* 📌 Display Image */}
+      {image && <img src={image} alt="Captured" className="max-w-full rounded-lg" />}
 
-      <video ref={videoRef} className="hidden" autoPlay></video>
-      <canvas ref={canvasRef} className="hidden"></canvas>
+      {/* 📌 Hidden Video & Canvas */}
+      <video ref={videoRef} className={stream ? "w-64 h-48 border rounded-lg shadow-md" : "hidden"} autoPlay></video>
+      <canvas ref={canvasRef} className="hidden" width="640" height="480"></canvas>
 
+      {/* 📌 Detected Label */}
       {detectedLabel && (
-        <div className="mt-4 flex items-center justify-center gap-2 w-full rounded-full border-2 border-[#2AF598] bg-[#2f3640] p-3 shadow-lg text-lg font-semibold text-white">
+        <div className="mt-4 flex items-center justify-center gap-2 w-full rounded-full 
+                        border-2 border-[#2AF598] bg-[#2f3640] p-3 shadow-lg text-lg 
+                        font-semibold text-white">
           Detected: {detectedLabel}
         </div>
       )}
 
+      {/* 📌 YouTube Results */}
       {youtubeResults.length > 0 && (
         <div className="mt-4 p-4 w-full rounded-xl border-2 border-[#2AF598] bg-[#2f3640] shadow-lg">
           <h2 className="text-xl font-bold text-white mb-3">YouTube Results</h2>
@@ -130,6 +172,7 @@ const ImageUpload: React.FC = () => {
         </div>
       )}
 
+      {/* 📌 Quiz Button */}
       {youtubeResults.length > 0 && (
         <Button onClick={() => navigate(`/quiz/${detectedLabel}`)} className="w-full bg-[#2AF598] text-black">
           Attempt Quiz
