@@ -1,4 +1,40 @@
+import { useState } from "react";
+
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(""); // Reset previous errors
+
+    try {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      console.log("📩 Server Response:", data); // ✅ Debugging
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed. Please try again.");
+      }
+
+      // Store token in localStorage
+      localStorage.setItem("token", data.token);
+      alert("Login Successful!");
+
+      // ✅ Redirect user to the home page (App page)
+      window.location.href = "/"; 
+    } catch (err: any) {
+      console.error("❌ Login Error:", err.message); // ✅ Debugging
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gradient-to-r from-purple-700 to-pink-500 items-center justify-center">
       <div className="bg-white shadow-lg rounded-lg flex max-w-4xl w-full">
@@ -13,19 +49,27 @@ const SignIn = () => {
         <div className="w-1/2 p-8">
           <h2 className="text-2xl font-semibold mb-6">Sign In</h2>
 
-          <form className="flex flex-col">
+          {error && <p className="text-red-500 mb-4">{error}</p>}
+
+          <form className="flex flex-col" onSubmit={handleSignIn}>
             <label className="text-gray-600 mb-1">Email Address:</label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Enter your email"
+              required
             />
 
             <label className="text-gray-600 mb-1">Password:</label>
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="border border-gray-300 rounded-md px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="Enter your password"
+              required
             />
 
             <button
