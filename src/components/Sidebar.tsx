@@ -10,7 +10,7 @@ const Sidebar = () => {
         "Previous Search 3",
     ];
 
-    const [isOpen, setIsOpen] = useState(true); // State to track sidebar open/close
+    const [isOpen, setIsOpen] = useState(false); // State to track sidebar open/close
     const [activeItem, setActiveItem] = useState(null); // State to track active item
 
     const toggleSidebar = () => {
@@ -32,11 +32,12 @@ const Sidebar = () => {
 
             {/* Sidebar */}
             <div
-                className={`w-64 border-r border-gray-800 h-screen fixed left-0 top-16 
-                  bg-gradient-to-b from-[#FADADD]/90 to-[#F8C8DC]/90 backdrop-blur-md 
-                  transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-                  
-            >
+    className={`w-64 border-r border-gray-800 h-screen fixed left-0 top-16 
+      bg-gradient-to-b from-[#5E81AC]/90 to-[#B48EAD]/90 backdrop-blur-md 
+      transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+>
+
+
                 <div className="p-4 border-b border-gray-800">
                     <div className="flex items-center gap-2">
                         <History className="w-5 h-5 text-gray-300" />
