@@ -24,12 +24,16 @@ const FAQ = () => {
 
   return (
     <div className="w-full max-w-2xl">
-      <h2 className="text-2xl font-semibold mb-4">Frequently Asked Questions</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-[#FEF7CD]">Frequently Asked Questions</h2>
       <Accordion type="single" collapsible className="w-full">
         {faqs.map((faq, index) => (
-          <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger>{faq.question}</AccordionTrigger>
-            <AccordionContent>{faq.answer}</AccordionContent>
+          <AccordionItem key={index} value={`item-${index}`} className="border-gray-700">
+            <AccordionTrigger className="text-[#D6BCFA] hover:text-[#D6BCFA]/80">
+              {faq.question}
+            </AccordionTrigger>
+            <AccordionContent className="text-gray-300">
+              {faq.answer}
+            </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>
