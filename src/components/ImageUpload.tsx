@@ -75,22 +75,24 @@ const ImageUpload: React.FC = () => {
       <div className="flex gap-4">
       <Button
     variant="outline"
-    className="flex-1 h-32 flex flex-col items-center justify-center gap-2 border-dashed rounded-lg font-sans" // Added font-sans and rounded-lg
+    className="flex-1 h-32 flex flex-col items-center justify-center gap-2 border-dashed rounded-lg font-sans transition-all duration-300 ease-in-out transform"
     style={{ 
-        borderColor: '#9370DB', // Light violet border
-        color: '#A020F0', // Deeper violet text
-        backgroundColor: 'rgba(224, 176, 255, 0.1)', // Very light violet background
-        transition: 'background-color 0.3s ease', // Smooth hover transition
+        borderColor: '#9370DB',
+        color: '#A020F0',
+        backgroundColor: 'rgba(224, 176, 255, 0.1)',
+        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)', // Subtle background shadow
     }}
     _hover={{
-        backgroundColor: 'rgba(224, 176, 255, 0.3)', // Slightly darker violet on hover
+        backgroundColor: 'rgba(224, 176, 255, 0.3)',
+        boxShadow: '0 0 10px rgba(160, 32, 240, 0.5)', // Violet glow on hover
+        transform: 'scale(1.05)', // Slight scale up on hover
     }}
     onClick={() => fileInputRef.current?.click()}
 >
     <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="#A020F0">
         <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
-    </svg> {/* New upload icon */}
-    <span className="font-medium" style={{ color: '#A020F0' }}>Upload Image</span> {/* Bold violet text */}
+    </svg>
+    <span className="font-medium" style={{ color: '#A020F0' }}>Upload Image</span>
     <Input
         type="file"
         accept="image/*"
@@ -99,7 +101,8 @@ const ImageUpload: React.FC = () => {
         onChange={handleFileChange}
     />
 </Button>
- 
+        
+
         <Button
           variant="outline"
           className="flex-1 h-32 flex flex-col items-center justify-center gap-2"
