@@ -133,14 +133,19 @@ const ImageUpload: React.FC = () => {
                        transition-all hover:bg-[#3a3f4b] hover:border-[#009EFD]"
             onClick={startCamera}
           >
-            <Camera className="w-6 h-6 text-[#2AF598]" />
+            <Camera className="w-6 h-6 text-[#2AF598] justify-center" />
             <span className="text-lg">Take Photo</span>
           </button>
         )}
       </div>
 
       {/* 📌 Display Image */}
-      {image && <img src={image} alt="Captured" className="max-w-full rounded-lg" />}
+      {image && (
+  <div className="flex justify-center items-center">
+    <img src={image} alt="Captured" className="max-w-full rounded-lg" />
+  </div>
+)}
+
 
       {/* 📌 Hidden Video & Canvas */}
       <video ref={videoRef} className={stream ? "w-64 h-48 border rounded-lg shadow-md" : "hidden"} autoPlay></video>
