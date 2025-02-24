@@ -9,7 +9,7 @@ interface MCQ {
 }
 
 const QuizPage: React.FC = () => {
-  const { objectName } = useParams<{ objectName: string }>();
+  const { objectName } = useParams<{ objectName: string }>(); // Get search query from URL
   const [questions, setQuestions] = useState<MCQ[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -18,12 +18,14 @@ const QuizPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!objectName) return; // Prevent API call if objectName is undefined
+
     const fetchQuiz = async () => {
       try {
         const response = await fetch("http://127.0.0.1:5000/gemini", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ object: objectName }),
+          body: JSON.stringify({ object: objectName }), // Send the search query
         });
 
         const data = await response.json();
@@ -36,7 +38,7 @@ const QuizPage: React.FC = () => {
       }
     };
 
-    if (objectName) fetchQuiz();
+    fetchQuiz();
   }, [objectName]);
 
   useEffect(() => {

@@ -8,7 +8,7 @@ import SignIn from "./pages/sign-in";
 import SignUp from "./pages/sign-up";
 import NotFound from "./pages/NotFound";
 import ImageUpload from "./components/ImageUpload";
-import QuizPage from "./pages/QuizPage.tsx";
+import QuizPage from "./pages/QuizPage";
 
 const queryClient = new QueryClient();
 
@@ -23,7 +23,7 @@ const App = () => (
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/upload" element={<ImageUpload />} />
-          <Route path="/quiz/:objectName" element={<QuizPage />} />
+          <Route path="/quiz/:objectName" element={<QuizPage />} /> {/* Needed for image uploads */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
