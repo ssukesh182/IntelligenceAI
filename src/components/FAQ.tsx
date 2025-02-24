@@ -9,7 +9,7 @@ import {
 const FAQ = () => {
   const faqs = [
     {
-      question: "What is ImagiQuest?",
+      question: "What is Educreate?",
       answer: "ImagiQuest is a platform that helps you discover and create DIY projects using the Instructables API and AI-powered image recognition.",
     },
     {
