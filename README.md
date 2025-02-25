@@ -2,7 +2,7 @@
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/7ed3405e-fb93-41bb-ba7a-81b820cba2ae
+https://intelligence-ai-git-main-ssukesh2007-gmailcoms-projects.vercel.app/
 
 ## How can I edit this code?
 
